@@ -1,3 +1,4 @@
+from app.models.data_convertion import DataConvertion
 from sys import argv
 
 
@@ -7,7 +8,7 @@ def run():
       return expectedArguments()
     argv.pop(0)
     k, d, text = getArguments()
-    print(k, d, text)
+    DataConvertion(text).convert()
   except FileNotFoundError:
     print('O arquivo informado não é valido')
   except Exception as error:
