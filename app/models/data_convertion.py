@@ -1,45 +1,48 @@
+from app.models.data import Data
+
+
 class DataConvertion:
-  def __init__(self, text):
-    self.text = text
-    self.legend = None
-    self.id_index = -1
+  def __init__(self, path):
+    self.path = path
+    self.validColumns = -1
+    self.columnOfIds = -1
+    self.columnOfGroups = -1
+    self.legend = []
     self.ids = []
-    self.group_index = -1
     self.groups = []
-    self.data = []
+    self.values = []
 
-  def convert(self, clean=True):
-    lines = self.text.split('\n')
-    for index in range(len(lines)):
-      currentLine = lines[index].replace('\t', '').replace('\r', '')
-      elements = currentLine.split(' ')
-      for _ in range(elements.count('')): elements.remove('')
-      if len(elements) > 0: self.saveElement(elements, index)
-    if clean: self.clean()
-    for e in self.data:
-      print(e)
-    print(self.legend)
+  def convert(self):
+    with open(self.path) as file:
+      for line in file:
+        elements = list(filter(lambda x: x not in ['\t', '\n', '\r', ''], line.strip().split(' ')))
+        if len(elements) == 0: continue
+        elif len(self.legend) == 0: self.saveLegend(elements)
+        else: self.saveElements(elements)
+    return Data(self.legend, self.ids, self.groups, self.values)
 
-  def saveElement(self, elements, index):
-    if index == 0:
-      if elements[0].replace('.', '', 1).isdigit(): self.legend = ['Unkown'] * len(elements)
-      else:
-        if elements.count('id') != 0:
-          self.id_index = elements.index('id')
-          elements.pop(self.id_index)
-        if elements.count('group') != 0:
-          self.group_index = elements.index('group')
-          elements.pop(self.group_index)
-        self.legend = elements
+  def saveLegend(self, elements):
+    self.validColumns = len(elements)
+    if self.isValidValue(elements[0]):
+      self.legend = [f'column_{x}' for x in range(len(elements))]
     else:
-      converted = []
-      for index, element in enumerate(elements):
-        if self.id_index == index: self.ids.append(element)
-        elif self.group_index == index: self.groups.append(element)
-        elif element.isdigit(): converted.append(int(element))
-        elif element.replace('.', '', 1).isdigit(): converted.append(float(element))
-        else: converted.append('-1')
-      self.data.append(converted)
+      if elements.count('id') != 0:
+        self.columnOfIds = elements.index('id')
+        elements.pop(self.columnOfIds)
+      if elements.count('group') != 0:
+        self.columnOfGroups = elements.index('group')
+        elements.pop(self.columnOfGroups)
+      self.legend = elements
 
-  def clean(self):
-    self.data = list(filter(lambda x: len(x) == len(self.legend), self.data))
+  def saveElements(self, elements):
+    if len(elements) != self.validColumns or len([x for x in elements if self.isValidValue(x)]) != self.validColumns: return
+    if self.columnOfIds != -1: self.ids.append(elements.pop(self.columnOfIds))
+    if self.columnOfGroups != -1: self.groups.append(elements.pop(self.columnOfGroups))
+    self.values.append([self.convertValue(x) for x in elements])
+
+  def isValidValue(self, value):
+    return value.replace('.', '', 1).replace('-', '', 1).isdigit()
+
+  def convertValue(self, value):
+    if value.isdigit(): return int(value)
+    return float(value)

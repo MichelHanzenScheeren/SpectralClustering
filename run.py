@@ -4,11 +4,13 @@ from sys import argv
 
 def run():
   try:
-    if len(argv) < 2:
-      return expectedArguments()
-    argv.pop(0)
-    k, d, text = getArguments()
-    DataConvertion(text).convert()
+    if len(argv) < 2: return expectedArguments()
+    k, d, path = getArguments(argv[1:])
+    print(f'k: {k}, d: {d}')
+    data = DataConvertion(path).convert()
+    for value in data.values: print(value)
+    print(data.legend)
+    print(data.groups)
   except FileNotFoundError:
     print('O arquivo informado não é valido')
   except Exception as error:
@@ -23,34 +25,34 @@ def expectedArguments():
   print('\t\t0 - suprema; 1 - manhattan; 2 - euclidiana')
 
 
-def getArguments():
+def getArguments(arguments):
   k, d, text = None, None, None
-  while len(argv) > 0:
-    argument = argv.pop(0)
-    if argument == '-k' or argument == '-d':
-      k, d = getIntArguments(argument, k, d)
+  while len(arguments) > 0:
+    current = arguments.pop(0)
+    if current == '-k' or current == '-d':
+      k, d = getIntArguments(arguments, current, k, d)
     else:
-      text = getFileArgument(argument)
+      text = getFileArgument(current)
   return (k, d, text)
 
 
-def getIntArguments(argument, k, d):
-  if len(argv) == 0 or not argv[0].isnumeric():
-    raise Exception(f'Argumento inválido. Esperava um valor inteiro depois de {argument}')
-  if argument == '-k':
-    k = int(argv.pop(0))
-    if k <= 0:
-      raise Exception(f'Argumento inválido. Esperava que "k" fosse maior do que zero (informado: {k})')
+def getIntArguments(arguments, current, k, d):
+  if len(arguments) == 0 or not arguments[0].isnumeric():
+    raise Exception(f'Argumento inválido. Esperava um valor inteiro depois de {current}')
+  if current == '-k':
+    k = int(arguments.pop(0))
+    if k == 0:
+      raise Exception(f'Argumento inválido. Esperava que "k" fosse maior do que zero')
     return k, d
-  d = int(argv.pop(0))
+  d = int(arguments.pop(0))
   if d not in [0, 1, 2]:
     raise Exception(f'Argumento inválido. Esperava que "d" fosse 0, 1 ou 2 (informado: {d})')
   return k, d
 
 
 def getFileArgument(argument):
-  with open(argument, "r") as myFile:
-    return myFile.read()
+  with open(argument, "r"):  # Check if file exists and can be decoded
+    return argument
 
 
 # INICIO DA EXECUÇÃO
