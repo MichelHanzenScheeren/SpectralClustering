@@ -8,9 +8,11 @@ def run():
     k, d, path = getArguments(argv[1:])
     print(f'k: {k}, d: {d}')
     data = DataConvertion(path).convert()
-    for value in data.values: print(value)
-    print(data.legend)
-    print(data.groups)
+    print('\nValues:')
+    for e in data.values: print(e)
+    print('\n\nGroups: \n', data.groups, end='\n\n')
+    print('Ids: \n', data.ids, end='\n\n')
+    print('Legend: \n', data.legend)
   except FileNotFoundError:
     print('O arquivo informado não é valido')
   except Exception as error:
