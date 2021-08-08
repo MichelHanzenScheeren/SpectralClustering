@@ -1,7 +1,7 @@
-from app.models.data import Data
+from app.io.data import Data
 
 
-class DataConvertion:
+class FromFile:
   def __init__(self, path):
     self.path = path
     self.validColumns = -1

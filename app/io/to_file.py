@@ -1,4 +1,4 @@
-class SaveData:
+class ToFile:
   def __init__(self, path, data):
     maxs = [len(x) + 4 for x in data.legend]
     with open(path, 'w') as file:
