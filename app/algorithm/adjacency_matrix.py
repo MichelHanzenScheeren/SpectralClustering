@@ -1,6 +1,3 @@
-import numpy
-
-
 class AdjacencyMatrix:
   def __init__(self, distanceMatrix=[], neighbors=8):
     self.distanceMatrix = distanceMatrix
@@ -15,4 +12,4 @@ class AdjacencyMatrix:
       for j in range(len(line)):
         if j != i and j in selecteds: line[j] = 1
         else: line[j] = 0
-    return numpy.array(self.distanceMatrix)
+    return self.distanceMatrix

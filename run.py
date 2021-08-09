@@ -1,3 +1,5 @@
+from app.algorithm.eigen_vectors import EigenVectors
+from app.algorithm.degree_matrix import DegreeMatrix
 from app.algorithm.adjacency_matrix import AdjacencyMatrix
 from app.algorithm.similarity_matrix import SimilarityMatrix
 from app.algorithm.distance import DistanceType
@@ -9,15 +11,28 @@ def run():
   try:
     if len(argv) < 2: return expectedArguments()
     k, d, _ = getArguments(argv[1:])
+    print(f'k: {k}, d: {d}\n')
+
     numbers = [[1, 2], [3, 7], [2, 0], [6, 3]]
-    matrix = DistanceMatrix(numbers, type=DistanceType.Supreme).generate()
-    for line in matrix:
+    distanceMatrix = DistanceMatrix(numbers, type=DistanceType.Supreme).generate()
+    for line in distanceMatrix:
       print(line)
     print()
-    matrix = AdjacencyMatrix(matrix, neighbors=1).generate()
-    for line in matrix:
+
+    adjacencyMatrix = AdjacencyMatrix(distanceMatrix, neighbors=2).generate()
+    for line in adjacencyMatrix:
       print(line)
-    print(f'\nk: {k}, d: {d}')
+    print()
+
+    degreeMatrix = DegreeMatrix(adjacencyMatrix).generate()
+    for line in degreeMatrix:
+      print(line)
+    print()
+
+    eigenVectors = EigenVectors(degreeMatrix, adjacencyMatrix).generate()
+    for line in eigenVectors:
+      print(line)
+    print()
   except FileNotFoundError:
     print('O arquivo informado não é valido')
   except Exception as error:
