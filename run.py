@@ -1,3 +1,7 @@
+from app.algorithm.adjacency_matrix import AdjacencyMatrix
+from app.algorithm.similarity_matrix import SimilarityMatrix
+from app.algorithm.distance import DistanceType
+from app.algorithm.distance_matrix import DistanceMatrix
 from sys import argv
 
 
@@ -5,7 +9,15 @@ def run():
   try:
     if len(argv) < 2: return expectedArguments()
     k, d, _ = getArguments(argv[1:])
-    print(f'k: {k}, d: {d}')
+    numbers = [[1, 2], [3, 7], [2, 0], [6, 3]]
+    matrix = DistanceMatrix(numbers, type=DistanceType.Supreme).generate()
+    for line in matrix:
+      print(line)
+    print()
+    matrix = AdjacencyMatrix(matrix, neighbors=1).generate()
+    for line in matrix:
+      print(line)
+    print(f'\nk: {k}, d: {d}')
   except FileNotFoundError:
     print('O arquivo informado não é valido')
   except Exception as error:
