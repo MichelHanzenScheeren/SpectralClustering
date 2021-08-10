@@ -4,7 +4,7 @@ import numpy
 
 
 class KMeans:
-  def __init__(self, numberOfCLusters, distanceType, maxIterations=150):
+  def __init__(self, numberOfCLusters, distanceType, maxIterations=200):
     self.numberOfCLusters = numberOfCLusters
     self.distanceType = distanceType
     self.maxIterations = maxIterations
@@ -32,4 +32,5 @@ class KMeans:
   def recalculateCentroids(self, values, centroids, groups):
     for i in range(len(centroids)):
       groupValuesIds = numpy.where(groups == i)
+      if len(groupValuesIds[0]) == 0: continue
       centroids[i] = numpy.average(numpy.take(values, groupValuesIds), axis=0)

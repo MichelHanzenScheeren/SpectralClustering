@@ -14,5 +14,5 @@ class ToFile:
           spaces = (' ' * (maxs[i] - len(f'{e}')))
           file.write(f'{e}{spaces}')
         if len(data.groups) > 0:
-          file.write(data.groups[index])
+          file.write(f'{data.groups[index]}')
         file.write('\n')

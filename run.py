@@ -1,3 +1,5 @@
+from app.utils.to_file import ToFile
+from app.utils.data import Data
 from app.utils.acuracy import Acuracy
 from app.algorithm.spectral_clustering import SpectralClustering
 from app.utils.from_file import FromFile
@@ -11,6 +13,8 @@ def run():
     data = FromFile(path).convert()
     classifiedGroups = SpectralClustering(numberOfClusters, distanceType, neighbors).generate(data.values)
     acuracy = Acuracy(data.groups, classifiedGroups).calculate()
+    newData = Data(data.legend, data.ids, classifiedGroups, data.values)
+    ToFile(f'./output/saida_{path.split("/")[-1]}', newData)
     print(f'Precisão: {acuracy:.2f}%')
   except FileNotFoundError:
     print('O arquivo informado não é valido')
