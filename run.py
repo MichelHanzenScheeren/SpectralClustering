@@ -14,23 +14,24 @@ def run():
     print(f'Precisão: {acuracy:.2f}%')
   except FileNotFoundError:
     print('O arquivo informado não é valido')
-  except RuntimeError:
-    expectedArguments()
+  except RuntimeError as error:
+    expectedArguments(error)
   except Exception as error:
     print(error)
 
 
-def expectedArguments():
-  print('Parâmetro obrigatório ausente.')
-  print('\t<path_arquivo_de_entrada.txt> (OBRIGATÓRIO)', end='\n\n')
-  print('\t-k <numero_de_clusters> (OPCIONAL - padrão: 2)')
-  print('\t-d <medida_de_distancia> (OPCIONAL - padrão: 2)')
-  print('\t\t0 - suprema; 1 - manhattan; 2 - euclidiana')
-  print('\t-n <numero_de_vizinhos_knn> (OPCIONAL - padrão: 8)')
+def expectedArguments(error):
+  if str(error) == '': print('Parâmetro obrigatório ausente.')
+  print('\t(OBRIGATÓRIO) <path_arquivo_de_entrada.txt>')
+  print('\t(OPCIONAL) -k <numero_de_clusters> (padrão: 2)')
+  print('\t(OPCIONAL) -d <medida_de_distancia> (padrão: 2)')
+  print('\t\t0 (suprema); 1 (manhattan); 2 (euclidiana)')
+  print('\t(OPCIONAL) -n <numero_de_vizinhos_knn> (padrão: 8)')
 
 
 def getArguments(arguments):
   k, d, n, path = None, None, None, None
+  if arguments[0] == '-h': raise RuntimeError('-h')
   while len(arguments) > 0:
     current = arguments.pop(0)
     if current == '-k': k = getIntArgument(arguments, current)
