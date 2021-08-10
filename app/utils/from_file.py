@@ -1,4 +1,4 @@
-from app.io.data import Data
+from app.utils.data import Data
 
 
 class FromFile:

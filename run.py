@@ -1,5 +1,6 @@
+from app.utils.acuracy import Acuracy
 from app.algorithm.spectral_clustering import SpectralClustering
-from app.io.from_file import FromFile
+from app.utils.from_file import FromFile
 from sys import argv
 
 
@@ -8,8 +9,11 @@ def run():
     if len(argv) < 2: return expectedArguments()
     numberOfClusters, distanceType, neighbors, path = getArguments(argv[1:])
     data = FromFile(path).convert()
-    groups = SpectralClustering(numberOfClusters, distanceType, neighbors).generate(data.values)
-    print(groups)
+    classifiedGroups = SpectralClustering(numberOfClusters, distanceType, neighbors).generate(data.values)
+    acuracy = Acuracy(data.groups, classifiedGroups).calculate()
+    print(f'Precisão: {acuracy}%\n')
+    print(data.groups, '\n\n')
+    print(classifiedGroups)
   except FileNotFoundError:
     print('O arquivo informado não é valido')
   except Exception as error:
