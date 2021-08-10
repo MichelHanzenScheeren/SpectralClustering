@@ -1,5 +1,5 @@
 class DegreeMatrix:
-  def __init__(self, matrix=[]):
+  def __init__(self, matrix):
     self.matrix = matrix = matrix
 
   def generate(self):

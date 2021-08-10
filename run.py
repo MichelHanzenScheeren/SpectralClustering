@@ -1,40 +1,14 @@
-from app.algorithm.k_means import KMeans
-from app.algorithm.eigen_vectors import EigenVectors
-from app.algorithm.degree_matrix import DegreeMatrix
-from app.algorithm.adjacency_matrix import AdjacencyMatrix
-from app.algorithm.distance import DistanceType
-from app.algorithm.distance_matrix import DistanceMatrix
+from app.algorithm.spectral_clustering import SpectralClustering
+from app.io.from_file import FromFile
 from sys import argv
 
 
 def run():
   try:
     if len(argv) < 2: return expectedArguments()
-    k, d, _ = getArguments(argv[1:])
-    print(f'k: {k}, d: {d}\n')
-
-    numbers = [[1, 2], [7, 7], [2, 0], [8, 9]]
-    distanceMatrix = DistanceMatrix(numbers, type=DistanceType.Supreme).generate()
-    for line in distanceMatrix:
-      print(line)
-    print()
-
-    adjacencyMatrix = AdjacencyMatrix(distanceMatrix, neighbors=2).generate()
-    for line in adjacencyMatrix:
-      print(line)
-    print()
-
-    degreeMatrix = DegreeMatrix(adjacencyMatrix).generate()
-    for line in degreeMatrix:
-      print(line)
-    print()
-
-    eigenVectors = EigenVectors(degreeMatrix, adjacencyMatrix).generate()
-    for line in eigenVectors:
-      print(line)
-    print()
-
-    groups = KMeans(eigenVectors[:, 1:k or 5], k).generate()
+    numberOfClusters, distanceType, neighbors, path = getArguments(argv[1:])
+    data = FromFile(path).convert()
+    groups = SpectralClustering(numberOfClusters, distanceType, neighbors).generate(data.values)
     print(groups)
   except FileNotFoundError:
     print('O arquivo informado não é valido')
@@ -51,28 +25,28 @@ def expectedArguments():
 
 
 def getArguments(arguments):
-  k, d, text = None, None, None
+  k, d, n, path = None, None, None, None
   while len(arguments) > 0:
     current = arguments.pop(0)
-    if current == '-k' or current == '-d':
-      k, d = getIntArguments(arguments, current, k, d)
-    else:
-      text = getFileArgument(current)
-  return (k, d, text)
+    if current == '-k': k = getIntArgument(arguments, current)
+    elif current == '-d': d = getIntArgument(arguments, current)
+    elif current == '-n': n = getIntArgument(arguments, current)
+    else: path = getFileArgument(current)
+  return (k, d, n, path)
 
 
-def getIntArguments(arguments, current, k, d):
+def getIntArgument(arguments, current):
   if len(arguments) == 0 or not arguments[0].isnumeric():
     raise Exception(f'Argumento inválido. Esperava um valor inteiro depois de {current}')
-  if current == '-k':
-    k = int(arguments.pop(0))
-    if k == 0:
-      raise Exception(f'Argumento inválido. Esperava que "k" fosse maior do que zero')
-    return k, d
-  d = int(arguments.pop(0))
-  if d not in [0, 1, 2]:
-    raise Exception(f'Argumento inválido. Esperava que "d" fosse 0, 1 ou 2 (informado: {d})')
-  return k, d
+  if current == '-k' or current == '-n':
+    newArgument = int(arguments.pop(0))
+    if newArgument == 0:
+      raise Exception(f'Argumento inválido. Esperava que "{current}" fosse maior do que zero')
+    return newArgument
+  newArgument = int(arguments.pop(0))
+  if newArgument not in [0, 1, 2]:
+    raise Exception(f'Argumento inválido. Esperava que "-d" fosse 0, 1 ou 2 (informado: {newArgument})')
+  return newArgument
 
 
 def getFileArgument(argument):

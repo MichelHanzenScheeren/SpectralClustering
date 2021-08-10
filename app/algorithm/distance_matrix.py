@@ -2,7 +2,7 @@ from app.algorithm.distance import Distance, DistanceType
 
 
 class DistanceMatrix:
-  def __init__(self, values=[], type=DistanceType.Manhattan):
+  def __init__(self, values, type):
     self.values = values
     self.type = type
 

@@ -10,7 +10,7 @@ class Distance:
     self.value1 = value1
     self.value2 = value2
 
-  def solve(self, type=DistanceType.Manhattan):
+  def solve(self, type):
     if type == DistanceType.Manhattan: return self.manhattan()
     elif type == DistanceType.Euclidean: return self.euclidean()
     return self.supreme()
