@@ -1,7 +1,7 @@
+from app.algorithm.k_means import KMeans
 from app.algorithm.eigen_vectors import EigenVectors
 from app.algorithm.degree_matrix import DegreeMatrix
 from app.algorithm.adjacency_matrix import AdjacencyMatrix
-from app.algorithm.similarity_matrix import SimilarityMatrix
 from app.algorithm.distance import DistanceType
 from app.algorithm.distance_matrix import DistanceMatrix
 from sys import argv
@@ -13,7 +13,7 @@ def run():
     k, d, _ = getArguments(argv[1:])
     print(f'k: {k}, d: {d}\n')
 
-    numbers = [[1, 2], [3, 7], [2, 0], [6, 3]]
+    numbers = [[1, 2], [7, 7], [2, 0], [8, 9]]
     distanceMatrix = DistanceMatrix(numbers, type=DistanceType.Supreme).generate()
     for line in distanceMatrix:
       print(line)
@@ -33,6 +33,9 @@ def run():
     for line in eigenVectors:
       print(line)
     print()
+
+    groups = KMeans(eigenVectors[:, 1:k or 5], k).generate()
+    print(groups)
   except FileNotFoundError:
     print('O arquivo informado não é valido')
   except Exception as error:
