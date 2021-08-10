@@ -18,7 +18,6 @@ class KMeans:
       self.recalculateCentroids(values, centroids, groups)
       iterations += 1
       if not wasChanged: break
-    print(iterations)
     return groups
 
   def classifyPoints(self, values, centroids, groups, wasChanged):
