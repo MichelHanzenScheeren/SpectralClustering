@@ -44,5 +44,5 @@ class FromFile:
     return value.replace('.', '', 1).replace('-', '', 1).isdigit()
 
   def convertValue(self, value):
-    if value.isdigit(): return int(value)
+    if value.replace('-', '', 1).isdigit(): return int(value)
     return float(value)

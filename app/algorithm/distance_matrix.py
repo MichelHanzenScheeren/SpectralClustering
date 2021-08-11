@@ -1,9 +1,10 @@
-from app.algorithm.distance import Distance, DistanceType
+from app.algorithm.distance import Distance
+import numpy
 
 
 class DistanceMatrix:
   def __init__(self, values, type):
-    self.values = values
+    self.values = self.normalize(values)
     self.type = type
 
   def generate(self):
@@ -16,3 +17,7 @@ class DistanceMatrix:
         else: line.append(Distance(value1, value2).solve(self.type))
       result.append(line)
     return result
+
+  def normalize(self, values):
+    mins, maxs = numpy.min(values, axis=0), numpy.max(values, axis=0)
+    return (values - mins) / (maxs - mins)
