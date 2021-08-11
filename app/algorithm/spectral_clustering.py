@@ -10,7 +10,7 @@ class SpectralClustering:
   def __init__(self, numberOfCLusters, distanceType, neighbors):
     self.numberOfCLusters = numberOfCLusters if numberOfCLusters is not None else 2
     self.distanceType = distanceType if distanceType is not None else 2
-    self.neighbors = neighbors if neighbors is not None else 8
+    self.neighbors = neighbors if neighbors is not None else 10
 
   def generate(self, values):
     self.__validateArgs__(values)
