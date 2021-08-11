@@ -18,7 +18,8 @@ class SpectralClustering:
     adjacencyMatrix = AdjacencyMatrix(distanceMatrix, self.neighbors).generate()
     degreeMatrix = DegreeMatrix(adjacencyMatrix).generate()
     eigenVectors = EigenVectors(degreeMatrix, adjacencyMatrix).generate()
-    return KMeans(self.numberOfCLusters, DistanceType(self.distanceType)).generate(eigenVectors[:, 1:self.numberOfCLusters])
+    kmeans = KMeans(self.numberOfCLusters, DistanceType(self.distanceType))
+    return kmeans.generate(eigenVectors[:, 1:self.numberOfCLusters])
 
   def __validateArgs__(self, values):
     if len(values) <= 2:

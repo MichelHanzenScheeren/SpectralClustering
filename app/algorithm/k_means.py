@@ -10,7 +10,7 @@ class KMeans:
     self.maxIterations = maxIterations
 
   def generate(self, values):
-    centroids = [values[randint(0, len(values) - 1)] for _ in range(self.numberOfCLusters)]
+    centroids = self.kPlusPlusCentroids(values)
     groups = numpy.zeros(len(values), dtype=numpy.int8)
     iterations = 0
     while iterations < self.maxIterations:
@@ -19,6 +19,21 @@ class KMeans:
       iterations += 1
       if not wasChanged: break
     return groups
+
+  def kPlusPlusCentroids(self, values):
+    centroids = [values[randint(0, len(values) - 1)]]
+    numberOfCentroids = 1
+    while numberOfCentroids < self.numberOfCLusters:
+      newCentroid, distance = None, None
+      for centroid in centroids:
+        distances = [Distance(line, centroid).solve(self.distanceType) for line in values]
+        candidateDistance = numpy.amax(distances)
+        if distance is None or candidateDistance > distance:
+          newCentroid = values[numpy.where(distances == candidateDistance)[0][0]]
+          distance = candidateDistance
+      centroids.append(newCentroid)
+      numberOfCentroids += 1
+    return centroids
 
   def classifyPoints(self, values, centroids, groups, wasChanged):
     for i, line in enumerate(values):
