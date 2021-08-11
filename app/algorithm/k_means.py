@@ -1,4 +1,4 @@
-from app.algorithm.distance import Distance, DistanceType
+from app.algorithm.distance import Distance
 from random import randint
 import numpy
 
@@ -21,18 +21,19 @@ class KMeans:
     return groups
 
   def kPlusPlusCentroids(self, values):
-    centroids = [values[randint(0, len(values) - 1)]]
+    copyValues = values
+    centroids = [copyValues[randint(0, len(copyValues) - 1)]]
+    distances = numpy.array([Distance(line, centroids[0]).solve(self.distanceType) for line in copyValues])
     numberOfCentroids = 1
-    while numberOfCentroids < self.numberOfCLusters:
-      newCentroid, distance = None, None
-      for centroid in centroids:
-        distances = [Distance(line, centroid).solve(self.distanceType) for line in values]
-        candidateDistance = numpy.amax(distances)
-        if distance is None or candidateDistance > distance:
-          newCentroid = values[numpy.where(distances == candidateDistance)[0][0]]
-          distance = candidateDistance
+    while True:
+      maxDistanceindex = numpy.where(distances == numpy.amax(distances))[0][0]
+      newCentroid = copyValues[maxDistanceindex]
       centroids.append(newCentroid)
       numberOfCentroids += 1
+      if numberOfCentroids >= self.numberOfCLusters: break
+      copyValues = numpy.delete(copyValues, maxDistanceindex, axis=0)
+      distances = numpy.delete(distances, maxDistanceindex)
+      distances = (distances + numpy.array([Distance(line, centroids[-1]).solve(self.distanceType) for line in copyValues])) / 2
     return centroids
 
   def classifyPoints(self, values, centroids, groups, wasChanged):
