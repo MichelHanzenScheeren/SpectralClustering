@@ -8,14 +8,13 @@ class DistanceMatrix:
     self.type = type
 
   def generate(self):
-    result = []
+    length = len(self.values)
+    result = numpy.zeros(shape=(length, length))
     for i, value1 in enumerate(self.values):
-      line = []
       for j, value2 in enumerate(self.values):
-        if j == i: line.append(0)
-        elif j < i: line.append(result[j][i])
-        else: line.append(Distance(value1, value2).solve(self.type))
-      result.append(line)
+        if j == i: continue
+        elif j < i: result[i][j] = result[j][i]
+        else: result[i][j] = Distance(value1, value2).solve(self.type)
     return result
 
   def normalize(self, values):

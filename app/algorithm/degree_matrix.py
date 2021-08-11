@@ -1,11 +1,13 @@
+import numpy
+
+
 class DegreeMatrix:
   def __init__(self, matrix):
     self.matrix = matrix = matrix
 
   def generate(self):
-    result = []
+    length = len(self.matrix)
+    result = numpy.zeros(shape=(length, length))
     for i, line in enumerate(self.matrix):
-      somatory = sum(line)
-      newLine = [somatory if current == i else 0 for current in range(len(line))]
-      result.append(newLine)
+      line[i] = sum(line)
     return result
