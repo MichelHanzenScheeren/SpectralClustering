@@ -4,6 +4,7 @@ from app.utils.acuracy import Acuracy
 from app.algorithm.spectral_clustering import SpectralClustering
 from app.utils.from_file import FromFile
 from sys import argv
+import numpy
 
 
 def run():
@@ -32,7 +33,7 @@ def expectedArguments(error):
   print('\t(OPCIONAL) -k <numero_de_clusters> (padrão: 2)')
   print('\t(OPCIONAL) -d <medida_de_distancia> (padrão: 2)')
   print('\t\t0 (suprema); 1 (manhattan); 2 (euclidiana)')
-  print('\t(OPCIONAL) -n <numero_de_vizinhos_knn> (padrão: 8)')
+  print('\t(OPCIONAL) -n <numero_de_vizinhos_knn> (padrão: 10)')
 
 
 def getArguments(arguments):

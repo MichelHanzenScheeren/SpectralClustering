@@ -7,6 +7,8 @@ from app.algorithm.distance import DistanceType
 
 
 class SpectralClustering:
+  """ Classe que encapsula toda a lógica do spectral clustering. """
+
   def __init__(self, numberOfCLusters, distanceType, neighbors):
     self.numberOfCLusters = numberOfCLusters if numberOfCLusters is not None else 2
     self.distanceType = distanceType if distanceType is not None else 2
@@ -19,9 +21,11 @@ class SpectralClustering:
     degreeMatrix = DegreeMatrix(adjacencyMatrix).generate()
     eigenVectors = EigenVectors(degreeMatrix, adjacencyMatrix).generate()
     kmeans = KMeans(self.numberOfCLusters, DistanceType(self.distanceType))
+    # Na versão do cluster que seguimos, utiliza-se no KMeans todos os autovetores, com as colunas de 1 até o número de clusters que se que dividir.
     return kmeans.generate(eigenVectors[:, 1:self.numberOfCLusters])
 
   def __validateArgs__(self, values):
+    """ Validação básica dos dados, para evitar erros em tepo de execução. """
     if len(values) <= 2:
       raise Exception('São necessários pelo menos 2 dados para a aplicação da classificação')
     if len(values[0]) == 0:
