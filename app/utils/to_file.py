@@ -1,4 +1,6 @@
 class ToFile:
+  """ Classe que recebe uma instância de dados e os salva em um arquivo de saída. """
+
   def __init__(self, path, data):
     maxs = [len(x) + 4 for x in data.legend]
     with open(path, 'w') as file:

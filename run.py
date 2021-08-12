@@ -7,15 +7,16 @@ from sys import argv
 
 
 def run():
+  """ Método que inicia toda a lógica do programa """
   try:
-    if len(argv) < 2: raise RuntimeError()
-    numberOfClusters, distanceType, neighbors, path = getArguments(argv[1:])
-    data = FromFile(path).convert()
-    classifiedGroups = SpectralClustering(numberOfClusters, distanceType, neighbors).generate(data.values)
-    acuracy = Acuracy(data.groups, classifiedGroups).calculate()
-    newData = Data(data.legend, data.ids, classifiedGroups, data.values)
-    ToFile(f'./output/saida_{path.split("/")[-1]}', newData)
-    print(f'Precisão: {acuracy:.2f}%')
+    numberOfClusters, distanceType, neighbors, path = getArguments(argv[1:])  # Obtenção dos argumentos
+    data = FromFile(path).convert()  # Conversão do arquivo para o formato de dado usado no programa
+    spectral = SpectralClustering(numberOfClusters, distanceType, neighbors)  # Criação do cluster com os arg. de configuração
+    classifiedGroups = spectral.generate(data.values)  # Execução. Recebe valores manipuláveis e devolve uma lista com os grupos classificados.
+    newData = Data(data.legend, data.ids, classifiedGroups, data.values)  # Criação de classe "Data" com os novos grupos da classificação.
+    ToFile(f'./output/saida_{path.split("/")[-1]}', newData)  # Geração do arquivo de saída.
+    acuracy = Acuracy(data.groups, classifiedGroups).calculate()  # Precisão do algoritmo. REMOVER
+    print(f'Precisão: {acuracy:.2f}%')  # Precisão do algoritmo. REMOVER
   except FileNotFoundError:
     print('O arquivo informado não é valido')
   except RuntimeError as error:
@@ -25,6 +26,7 @@ def run():
 
 
 def expectedArguments(error):
+  """ Descrição dos parâmetros aceitos na execução pelo terminal. """
   if str(error) == '': print('Parâmetro obrigatório ausente.')
   print('\t(OBRIGATÓRIO) <path_arquivo_de_entrada.txt>')
   print('\t(OPCIONAL) -k <numero_de_clusters> (padrão: 2)')
@@ -34,8 +36,10 @@ def expectedArguments(error):
 
 
 def getArguments(arguments):
+  """ Método que encapsula a lógica de extração dos parâmetros. """
+  if len(arguments) < 1: raise RuntimeError()
   k, d, n, path = None, None, None, None
-  if arguments[0] == '-h': raise RuntimeError('-h')
+  if arguments[0] == '-h': raise RuntimeError('-h')  # Mostra a lista de parÂmetros
   while len(arguments) > 0:
     current = arguments.pop(0)
     if current == '-k': k = getIntArgument(arguments, current)
