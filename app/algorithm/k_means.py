@@ -17,6 +17,7 @@ class KMeans:
     while iterations < self.maxIterations:  # Controle para limite de iterações
       wasChanged = self.classifyPoints(values, centroids, groups, False)  # Reclassifica os pontos para seu centróide mais próximo.
       self.recalculateCentroids(values, centroids, groups)  # Recalcula os centróides.
+      iterations += 1
       if not wasChanged: break  # Se nenhum ponto mudou de centróide, o algoritmo já convergiu e pode ser finalizado.
     return groups
 
