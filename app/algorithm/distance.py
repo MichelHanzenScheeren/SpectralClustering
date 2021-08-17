@@ -6,8 +6,8 @@ class DistanceType(Enum):
 
 
 class Distance:
-  """ Classe que encapsula a lógica de cálculo das ditâncias.
-  Os métodos usam auxiliares do pytho (como max - retorna o valor mais alto da lista, ou sum - soma todos os valores da lista).
+  """ Classe que encapsula a lógica de cálculo das distâncias.
+  Os métodos usam auxiliares do python (como max - retorna o valor mais alto da lista, ou sum - soma todos os valores da lista).
   O método 'zip' pega duas (ou mais) listas e devolve uma nova lista com as posições unidas. Ex: zip([a, b], [c, d]) => [[a, c], [b, d]]. """
   def __init__(self, value1, value2):
     self.value1 = value1

@@ -25,7 +25,7 @@ class SpectralClustering:
     return kmeans.generate(eigenVectors[:, 1:self.numberOfCLusters])
 
   def __validateArgs__(self, values):
-    """ Validação básica dos dados, para evitar erros em tepo de execução. """
+    """ Validação básica dos dados, para evitar erros em tempo de execução. """
     if len(values) <= 2:
       raise Exception('São necessários pelo menos 2 dados para a aplicação da classificação')
     if len(values[0]) == 0:

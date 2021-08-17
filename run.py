@@ -1,10 +1,8 @@
 from app.utils.to_file import ToFile
 from app.utils.data import Data
-from app.utils.acuracy import Acuracy
 from app.algorithm.spectral_clustering import SpectralClustering
 from app.utils.from_file import FromFile
 from sys import argv
-import numpy
 
 
 def run():
@@ -16,8 +14,7 @@ def run():
     classifiedGroups = spectral.generate(data.values)  # Execução. Recebe valores manipuláveis e devolve uma lista com os grupos classificados.
     newData = Data(data.legend, data.ids, classifiedGroups, data.values)  # Criação de classe "Data" com os novos grupos da classificação.
     ToFile(f'./output/saida_{path.split("/")[-1]}', newData)  # Geração do arquivo de saída.
-    acuracy = Acuracy(data.groups, classifiedGroups).calculate()  # Precisão do algoritmo. REMOVER
-    print(f'Precisão: {acuracy:.2f}%')  # Precisão do algoritmo. REMOVER
+    print(f'Algoritmo executado.\nSaída salva em ./output/saida_{path.split("/")[-1]}')
   except FileNotFoundError:
     print('O arquivo informado não é valido')
   except RuntimeError as error:
