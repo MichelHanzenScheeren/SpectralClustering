@@ -115,3 +115,4 @@ dmypy.json
 
 # PERSONALIZED
 candidates/
+.vscode/*

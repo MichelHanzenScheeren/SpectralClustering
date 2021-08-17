@@ -10,9 +10,9 @@ def run():
   try:
     numberOfClusters, distanceType, neighbors, path = getArguments(argv[1:])  # Obtenção dos argumentos
     data = FromFile(path).convert()  # Conversão do arquivo para o formato de dado usado no programa
-    spectral = SpectralClustering(numberOfClusters, distanceType, neighbors)  # Criação do cluster com os arg. de configuração
-    classifiedGroups = spectral.generate(data.values)  # Execução. Recebe valores manipuláveis e devolve uma lista com os grupos classificados.
-    newData = Data(data.legend, data.ids, classifiedGroups, data.values)  # Criação de classe "Data" com os novos grupos da classificação.
+    spectral = SpectralClustering(numberOfClusters, distanceType, neighbors)  # Criação do cluster
+    classifiedGroups = spectral.generate(data.values)  # Execução. Devolve uma lista com os grupos classificados.
+    newData = Data(data.legend, data.ids, classifiedGroups, data.values)
     ToFile(f'./output/saida_{path.split("/")[-1]}', newData)  # Geração do arquivo de saída.
     print(f'Algoritmo executado.\nSaída salva em ./output/saida_{path.split("/")[-1]}')
   except FileNotFoundError:
